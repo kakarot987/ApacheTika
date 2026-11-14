@@ -4,7 +4,7 @@
 > **Priority:** Low overall; security work is mandatory before untrusted uploads  
 > **Portfolio role:** Document processing / Java integration  
 > **Profile:** Do not pin  
-> **Implementation progress:** 8/10 core improvements implemented, additional verification needed
+> **Implementation progress:** 9/10 improvements implemented and tested; hard isolation remains
 
 ## Implementation status
 
@@ -15,7 +15,7 @@
 - [x] **P1 — Structured DTO and errors** with HTTP 400, 413, 415, 422, 503 and fallback 500.
 - [x] **P1 — Close streams and remove raw document logging**; handlers use bounded input/output and no content console prints.
 - [x] **P1 — Eliminate inefficient custom string chunking**; legacy example utility is removed in favor of bounded `BodyContentHandler`.
-- [ ] **P1 — Complete representative test fixtures**; initial MockMvc tests cover TXT, empty, unsupported and over-limit data; PDF, DOCX and malformed fixtures remain.
+- [x] **P1 — Add representative parsing tests**; MockMvc covers TXT, empty, unsupported, upload and text limits, and generated fixtures cover valid PDF, DOCX and malformed PDF.
 - [x] **P2 — Add README** with local setup, sample curl/JSON, safety notes and Docker example.
 - [x] **P2 — Add CI and modernize Java / Spring** to Java 17, Spring Boot 3.5.8 and Gradle 8.14.3.
 
@@ -30,8 +30,8 @@ Field: `file`. Response: `{ "fileName": "...", "detectedType": "...", "text": ".
 
 ## Verification required
 
-- [ ] Confirm CI build and test completion; inspect resolved dependency graph for vulnerabilities.
-- [ ] Add valid PDF/DOCX fixtures, malformed PDF/DOCX and oversized-extraction acceptance tests.
+- [x] GitHub Actions Gradle compilation and tests passed on the implementation commit.\n- [ ] Review the resolved dependency graph with a vulnerability scanner and ensure ongoing dependency updates.
+- [x] Added valid PDF, valid DOCX, malformed PDF, and extraction limit tests.\n- [ ] Consider a dedicated malformed DOCX test and stronger timeout/integration tests.
 - [ ] Add hard-kill worker-process sandboxing or deploy within restrictive container quotas before exposing untrusted upload functionality.
 
 **Portfolio:** Keep public with security caveats, keep as a learning project, and **do not pin**. This is not a high-level system design project.
