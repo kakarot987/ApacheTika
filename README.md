@@ -11,7 +11,7 @@ A **learning-focused** Spring Boot + Apache Tika service that extracts text and 
 ## Run
 
 ```bash
-./gradlew clean test bootRun
+bash ./gradlew clean test bootRun
 ```
 
 Windows: use `gradlew.bat`. A Java 17 JDK is required.
@@ -59,7 +59,7 @@ Expected statuses: `400` empty/missing/invalid multipart; `413` over-size; `415`
 
 For **untrusted Internet-facing files**, do **not** rely on these in-process controls alone. Add authentication/rate limiting and run the service or parser workers inside an isolated container with strict CPU, RAM, process, disk and network limits, read-only filesystem, a bounded writable temporary filesystem, and a hard external request/job deadline. Do not treat this demo as a secure file-processing sandbox.
 
-Example development container build after `./gradlew bootJar`:
+Example development container build after `bash ./gradlew bootJar`:
 
 ```bash
 docker build -t apache-tika-demo .
@@ -69,6 +69,6 @@ docker run --rm -p 8080:8080 --memory=512m --cpus=1 \
 
 ## Tests and further work
 
-`./gradlew test` runs Spring context and HTTP API tests, including text extraction, empty input, unsupported binary formats, over-limit upload and extracted-text limits. Add dedicated valid PDF/DOCX, malformed document and hard-isolation integration tests before offering the endpoint to untrusted users. CI runs the Gradle build and tests on pushes and pull requests.
+`./gradlew test` runs Spring context and HTTP API tests, including text extraction, empty input, unsupported binary formats, over-limit upload and extracted-text limits. Add hard-isolation integration tests before offering the endpoint to untrusted users. CI runs the Gradle build and tests on pushes and pull requests.
 
 See [ROADMAP.md](ROADMAP.md) for the change tracker and remaining verification work.
