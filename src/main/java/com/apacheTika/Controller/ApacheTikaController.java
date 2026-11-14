@@ -1,32 +1,26 @@
 package com.apacheTika.Controller;
 
-import com.apacheTika.TikaConfig.ApacheTikaUtility;
-import org.apache.tika.exception.TikaException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import com.apacheTika.dto.DocumentParseResponse;
+import com.apacheTika.service.DocumentParsingService;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.xml.sax.SAXException;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
-@RequestMapping("/api/fileContent")
+@RequestMapping("/api/documents")
 public class ApacheTikaController {
 
-    @Autowired
-    ApacheTikaUtility apacheTikaUtility;
+    private final DocumentParsingService parsingService;
 
-    @GetMapping("/getContent")
-    public List<String> getFileContent(@RequestParam("file") MultipartFile file) throws IOException, TikaException, SAXException {
-        List<String> string = new ArrayList<>();
-        string.add(apacheTikaUtility.parseExample(file.getInputStream()));
-        string.add(apacheTikaUtility.parseToString(file.getInputStream()));
-        string.add(apacheTikaUtility.parseBodyToHTML(file.getInputStream()));
-        string.add(apacheTikaUtility.parseToHTML(file.getInputStream()));
-        string.add(apacheTikaUtility.parseToPlainText(file.getInputStream()));
-        string.add(apacheTikaUtility.parseToPlainTextChunks(file.getInputStream()).toString());
-        return string;
+    public ApacheTikaController(DocumentParsingService parsingService) {
+        this.parsingService = parsingService;
+    }
+
+    @PostMapping(value = "/parse", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public DocumentParseResponse parse(@RequestPart("file") MultipartFile file) {
+        return parsingService.parse(file);
     }
 }
